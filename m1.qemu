@@ -1,0 +1,42 @@
+qemu-system-aarch64
+-L /Applications/UTM.app/Contents/Resources/qemu
+-S
+-spice unix=on,addr=002648FC-E77A-453C-A7E7-A00136768BA4.spice,disable-ticketing=on,image-compression=off,playback-compression=off,streaming-video=off,gl=off
+-chardev spiceport,id=org.qemu.monitor.qmp,name=org.qemu.monitor.qmp.0
+-mon chardev=org.qemu.monitor.qmp,mode=control
+-nodefaults
+-vga none
+-device virtio-net-pci,mac=EE:7E:49:80:9C:72,netdev=net0
+-netdev vmnet-shared,id=net0
+-device virtio-gpu-pci
+-cpu host
+-smp cpus=4,sockets=1,cores=4,threads=1
+-machine virt
+-accel hvf
+-drive if=pflash,format=raw,unit=0,file.filename=/Applications/UTM.app/Contents/Resources/qemu/edk2-aarch64-code.fd,file.locking=off,readonly=on
+-drive if=pflash,unit=1,file=/Users/animcogn/Library/Containers/com.utmapp.UTM/Data/Documents/kali.utm/Data/efi_vars.fd
+-m 4096
+-audiodev spice,id=audio0
+-device intel-hda
+-device hda-duplex,audiodev=audio0
+-device nec-usb-xhci,id=usb-bus
+-device usb-tablet,bus=usb-bus.0
+-device usb-mouse,bus=usb-bus.0
+-device usb-kbd,bus=usb-bus.0
+-device qemu-xhci,id=usb-controller-0
+-chardev spicevmc,name=usbredir,id=usbredirchardev0
+-device usb-redir,chardev=usbredirchardev0,id=usbredirdev0,bus=usb-controller-0.0
+-chardev spicevmc,name=usbredir,id=usbredirchardev1
+-device usb-redir,chardev=usbredirchardev1,id=usbredirdev1,bus=usb-controller-0.0
+-chardev spicevmc,name=usbredir,id=usbredirchardev2
+-device usb-redir,chardev=usbredirchardev2,id=usbredirdev2,bus=usb-controller-0.0
+-device virtio-blk-pci,drive=drive5FF5BD91-459A-4480-89D5-975A0331707F,bootindex=0
+-drive if=none,media=disk,id=drive5FF5BD91-459A-4480-89D5-975A0331707F,file=/Users/animcogn/Library/Containers/com.utmapp.UTM/Data/Documents/kali.utm/Data/5FF5BD91-459A-4480-89D5-975A0331707F.qcow2,discard=unmap,detect-zeroes=unmap
+-device virtio-serial
+-device virtserialport,chardev=org.qemu.guest_agent,name=org.qemu.guest_agent.0
+-chardev spiceport,id=org.qemu.guest_agent,name=org.qemu.guest_agent.0
+-device virtserialport,chardev=vdagent,name=com.redhat.spice.0
+-chardev spicevmc,id=vdagent,debug=0,name=vdagent
+-name kali
+-uuid 002648FC-E77A-453C-A7E7-A00136768BA4
+-device virtio-rng-pci

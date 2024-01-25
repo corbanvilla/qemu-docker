@@ -7,6 +7,7 @@ set -Eeuo pipefail
 : ${CONTROL_PORTS:=''}
 : ${MAC:='82:cf:d0:5e:57:66'}
 
+: ${VM_NET_IP:='20.20.20.21'}
 : ${VM_NET_TAP:='qemu'}
 : ${VM_NET_DEV:='eth0'}
 : ${VM_NET_MAC:="$MAC"}
@@ -95,7 +96,6 @@ configureNAT () {
 
   # Create a bridge with a static IP for the VM guest
 
-  VM_NET_IP='20.20.20.21'
   [[ "$DEBUG" == [Yy1]* ]] && set -x
 
   { ip link add dev dockerbridge type bridge ; rc=$?; } || :

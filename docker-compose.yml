@@ -1,24 +1,123 @@
 version: "3"
 services:
-    qemu:
-        container_name: qemu
-        image: qemux/qemu-docker:latest
+    metasploitable:
+        container_name: metasploitable
+        build: '.'
         environment:
             DISPLAY: "vnc"
             RAM_SIZE: "1G"
             CPU_CORES: "1"
-            DISK_SIZE: "16G"
-            BOOT: "https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-standard-3.18.2-x86_64.iso"
+            DEBUG: "Y"
+            KVM: "${KVM_ENABLED}"
+            ARGUMENTS: "${METASPLOITABLE_ARGS}"
         devices:
-            - /dev/kvm
+            # TODO - update w/ sed
+            # - /dev/kvm
             - /dev/net/tun
             - /dev/vhost-net
+        volumes:
+            - ./disks/metasploitable:/storage
         device_cgroup_rules:
             - 'c *:* rwm'
         cap_add:
             - NET_ADMIN              
         ports:
-            - 2222:22
             - 5900:5900
         restart: on-failure
         stop_grace_period: 1m
+        network_mode: "host"
+
+    # wumpus:
+    #     container_name: wumpus
+    #     build: '.'
+    #     environment:
+    #         DISPLAY: "vnc"
+    #         RAM_SIZE: "1G"
+    #         CPU_CORES: "1"
+    #         KVM: "N"
+    #     devices:
+    #       #- /dev/kvm
+    #         - /dev/net/tun
+    #         - /dev/vhost-net
+    #     volumes:
+    #         - ./disks/wumpus:/storage
+    #     device_cgroup_rules:
+    #         - 'c *:* rwm'
+    #     cap_add:
+    #         - NET_ADMIN              
+    #     ports:
+    #         - 5902:5900
+    #     restart: on-failure
+    #     stop_grace_period: 1m
+    #     networks:
+    #         main:
+    #             ipv4_address: 10.10.0.3
+
+    # client:
+    #     container_name: client
+    #     build: '.'
+    #     environment:
+    #         DISPLAY: "vnc"
+    #         RAM_SIZE: "1G"
+    #         CPU_CORES: "1"
+    #         KVM: "N"
+    #     devices:
+    #       #- /dev/kvm
+    #         - /dev/net/tun
+    #         - /dev/vhost-net
+    #     volumes:
+    #         - ./disks/client:/storage
+    #     device_cgroup_rules:
+    #         - 'c *:* rwm'
+    #     cap_add:
+    #         - NET_ADMIN              
+    #     ports:
+    #         - 5903:5900
+    #     restart: on-failure
+    #     stop_grace_period: 1m
+    #     networks:
+    #         nbn_internal:
+    #             ipv4_address: 172.16.1.2
+
+    # server:
+    #     container_name: server
+    #     build: '.'
+    #     environment:
+    #         DISPLAY: "vnc"
+    #         RAM_SIZE: "1G"
+    #         CPU_CORES: "1"
+    #         KVM: "N"
+    #     devices:
+    #       #- /dev/kvm
+    #         - /dev/net/tun
+    #         - /dev/vhost-net
+    #     volumes:
+    #         - ./disks/server:/storage
+    #     device_cgroup_rules:
+    #         - 'c *:* rwm'
+    #     cap_add:
+    #         - NET_ADMIN              
+    #     ports:
+    #         - 5904:5900
+    #     restart: on-failure
+    #     stop_grace_period: 1m
+    #     networks:         
+    #         main:
+    #             ipv4_address: 10.10.0.66
+    #         nbn_internal:
+    #             ipv4_address: 172.16.1.3
+
+# networks:
+#     vlan:
+#         external: true
+    # main:
+    #     name: main
+    #     ipam:
+    #         config:
+    #             - subnet: 10.10.0.0/24
+    # nbn_internal:
+    #     name: nbn_internal
+    #     ipam:
+    #         config:
+    #             - subnet: 172.16.1.0/24
+    #     internal: true # no internet

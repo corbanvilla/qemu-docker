@@ -381,9 +381,11 @@ addDisk () {
   fi
 
   DISK_OPTS="$DISK_OPTS \
-    -device virtio-scsi-pci,id=hw-$DISK_ID,iothread=io2,bus=pcie.0,addr=$DISK_ADDRESS \
-    -drive file=$DISK_FILE,if=none,id=drive-$DISK_ID,format=$DISK_FMT,cache=$DISK_CACHE,aio=$DISK_IO,discard=$DISK_DISCARD,detect-zeroes=on \
-    -device scsi-hd,bus=hw-$DISK_ID.0,channel=0,scsi-id=0,lun=0,drive=drive-$DISK_ID,id=$DISK_ID,rotation_rate=$DISK_ROTATION,bootindex=$DISK_INDEX"
+    -device virtio-blk-pci,drive=drive-$DISK_ID,bootindex=$DISK_INDEX,bus=pcie.0,addr=$DISK_ADDRESS \
+    -drive if=none,media=disk,id=drive-$DISK_ID,file=$DISK_FILE,discard=unmap,detect-zeroes=unmap"
+    # -device virtio-scsi-pci,id=hw-$DISK_ID,iothread=io2,bus=pcie.0,addr=$DISK_ADDRESS \
+    # -drive file=$DISK_FILE,if=none,id=drive-$DISK_ID,format=$DISK_FMT,cache=$DISK_CACHE,aio=$DISK_IO,discard=$DISK_DISCARD,detect-zeroes=$DISK_DISCARD \
+    # -device scsi-hd,bus=hw-$DISK_ID.0,channel=0,scsi-id=0,lun=0,drive=drive-$DISK_ID,id=$DISK_ID,rotation_rate=$DISK_ROTATION,bootindex=$DISK_INDEX"
 
   return 0
 }
@@ -440,6 +442,8 @@ addDevice () {
     -device virtio-scsi-pci,id=hw-$DISK_ID,iothread=io2,bus=pcie.0,addr=$DISK_ADDRESS \
     -drive file=$DISK_DEV,if=none,id=drive-$DISK_ID,format=raw,cache=$DISK_CACHE,aio=$DISK_IO,discard=$DISK_DISCARD,detect-zeroes=on \
     -device scsi-hd,bus=hw-$DISK_ID.0,channel=0,scsi-id=0,lun=0,drive=drive-$DISK_ID,id=$DISK_ID,rotation_rate=$DISK_ROTATION,bootindex=$DISK_INDEX"
+    # -device virtio-blk-pci,drive=drive-$DISK_ID,bootindex=$DISK_INDEX \
+    # -drive if=none,media=disk,id=drive-$DISK_ID,file=$DISK_DEV,discard=unmap,detect-zeroes=unmap"
 
   return 0
 }

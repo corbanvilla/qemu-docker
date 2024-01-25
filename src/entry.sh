@@ -7,10 +7,11 @@ echo "❯ For support visit https://github.com/qemu-tools/qemu-docker/"
 cd /run
 
 . reset.sh      # Initialize system
-. install.sh    # Get bootdisk
-. disk.sh       # Initialize disks
+[[ "$NO_INSTALL" != "TRUE" ]] && . install.sh
+
 . display.sh    # Initialize display
-. network.sh    # Initialize network
+# . network.sh    # Initialize network
+NET_OPTS=""
 . boot.sh       # Configure boot
 . cpu.sh        # Initialize processor
 . config.sh     # Configure arguments
